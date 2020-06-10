@@ -15,9 +15,10 @@ class Checkout extends React.Component {
 		let price = 0
 		for (let param of query.entries()) {
 			// ['salad', '1']
-			
+			console.log('**********',param[0])
 			if (param[0] === 'price') {
-				price = param[1]
+				price = +param[1]
+				console.log('found price', typeof(price))
 			} else {
 				ingredients[param[0]] = +param[1]
 			}
@@ -34,7 +35,7 @@ class Checkout extends React.Component {
 	}
 
 	render() {
-		console.log('chackout props', this.props.location.ingredients)
+		// console.log('chackout props', this.props.location.ingredients)
 		return (
 			<div>
 				<CheckoutSummary
@@ -44,7 +45,7 @@ class Checkout extends React.Component {
 				/>
 				<Route
 					path={this.props.match.path + '/contact-data'}
-					render={(props) => <ContactData ingredients={this.state.ingredients} price={this.state.totalPrice} {...props} />}
+					render={(props) => <ContactData ingredients={this.state.ingredients} totalPrice={this.state.totalPrice} {...props} />}
 				/>
 			</div>
 		)

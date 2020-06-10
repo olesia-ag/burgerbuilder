@@ -23,18 +23,10 @@ class ContactData extends React.Component {
 			ingredients: this.props.ingredients,
 			//in production price shoulb be calculate on the server to make sure that user doesn't manipulate it
 			price: this.props.totalPrice,
-			customer: {
-				name: 'Olesia',
-				adress: {
-					street: 'Test',
-					zipCode: ' 45678',
-					country: 'USA',
-				},
-				email: 'test@test.com',
-			},
 			deliveryMethod: 'fastest',
 		}
-		//.json for firebase endpoint specifically!!!
+        //.json for firebase endpoint specifically!!!
+        console.log('order final:', order)
 		axiosIns
 			.post('/orders.json', order)
             .then((res) => {
