@@ -4,6 +4,7 @@ import classes from './ContactData.module.css'
 import axiosIns from '../../../axios-orders'
 import Spinner from '../../../components/UI/Spinner/Spinner'
 import Input from '../../../components/UI/Input/Input'
+import { connect } from 'react-redux'
 
 class ContactData extends React.Component {
 	state = {
@@ -19,7 +20,7 @@ class ContactData extends React.Component {
 					required: true,
 				},
 				valid: false,
-				touched: false
+				touched: false,
 			},
 			street: {
 				elementType: 'input',
@@ -32,7 +33,7 @@ class ContactData extends React.Component {
 					required: true,
 				},
 				valid: false,
-				touched: false
+				touched: false,
 			},
 			zipCode: {
 				elementType: 'input',
@@ -42,12 +43,12 @@ class ContactData extends React.Component {
 				},
 				value: '',
 				validation: {
-                    required: true,
-                    minLength: 5,
-                    maxLength: 5
+					required: true,
+					minLength: 5,
+					maxLength: 5,
 				},
 				valid: false,
-				touched: false
+				touched: false,
 			},
 			country: {
 				elementType: 'input',
@@ -60,7 +61,7 @@ class ContactData extends React.Component {
 					required: true,
 				},
 				valid: false,
-				touched: false
+				touched: false,
 			},
 			email: {
 				elementType: 'input',
@@ -73,7 +74,7 @@ class ContactData extends React.Component {
 					required: true,
 				},
 				valid: false,
-				touched: false
+				touched: false,
 			},
 			deliveryMethod: {
 				elementType: 'select',
@@ -85,7 +86,7 @@ class ContactData extends React.Component {
 				},
 				value: 'fastest',
 				validation: {},
-               	valid: true
+				valid: true,
 			},
 		},
 		formIsValid: false,
@@ -103,9 +104,9 @@ class ContactData extends React.Component {
 			].value
 		}
 		const order = {
-			ingredients: this.props.ingredients,
+			ingredients: this.props.ings,
 			//in production price shoulb be calculate on the server to make sure that user doesn't manipulate it
-			price: this.props.totalPrice,
+			price: this.props.totPr,
 			deliveryMethod: 'fastest',
 			orderData: formData,
 		}
@@ -122,7 +123,7 @@ class ContactData extends React.Component {
 
 	checkValidity(value, rules) {
 		let isValid = true
-		if(!rules){
+		if (!rules) {
 			return true
 		}
 		if (rules.required) {
@@ -130,15 +131,14 @@ class ContactData extends React.Component {
 		}
 		if (rules.minLength) {
 			isValid = value.length >= rules.minLength && isValid
-        }
-        if (rules.minLength) {
+		}
+		if (rules.minLength) {
 			isValid = value.length <= rules.maxLength && isValid
 		}
 		return isValid
 	}
 
 	inputChangedHandler = (event, inputIdentifier) => {
-
 		const updatedOrderForm = {
 			...this.state.orderForm,
 		}
@@ -151,7 +151,7 @@ class ContactData extends React.Component {
 		updatedFormElement.touched = true
 		updatedOrderForm[inputIdentifier] = updatedFormElement
 		let formIsValid = true
-		for (let inputIdentifier in updatedOrderForm){
+		for (let inputIdentifier in updatedOrderForm) {
 			formIsValid = updatedOrderForm[inputIdentifier].valid && formIsValid
 		}
 		console.log('is it valid!', formIsValid)
@@ -170,14 +170,18 @@ class ContactData extends React.Component {
 						elementType={formElement.config.elementType}
 						elementConfig={formElement.config.elementConfig}
 						value={formElement.config.value}
-                        changed={(event) => this.inputChangedHandler(event, formElement.id)}
-                        invalid={!formElement.config.valid}
-						shouldValidate = {formElement.config.validation}
-						touched = {formElement.config.touched}
+						changed={(event) => this.inputChangedHandler(event, formElement.id)}
+						invalid={!formElement.config.valid}
+						shouldValidate={formElement.config.validation}
+						touched={formElement.config.touched}
 					/>
 				))}
 
-				<Button btnType='Success' disabled ={!this.state.formIsValid} clicked={this.orderHandler}>
+				<Button
+					btnType='Success'
+					disabled={!this.state.formIsValid}
+					clicked={this.orderHandler}
+				>
 					ORDER
 				</Button>
 			</form>
@@ -193,5 +197,12 @@ class ContactData extends React.Component {
 		)
 	}
 }
+const mapStateToProps = (state) => {
+	return {
+		ings: state.ingredients,
+		totPr: state.totalPrice,
+	}
+}
 
-export default ContactData
+
+export default connect(mapStateToProps)(ContactData)

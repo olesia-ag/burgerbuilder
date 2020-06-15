@@ -10,18 +10,10 @@ import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler'
 import * as actionTypes from '../../store/actions'
 import { connect } from 'react-redux'
 
-const INGREDIENT_PRICES = {
-	salad: 0.5,
-	cheese: 1.5,
-	meat: 3,
-	bacon: 2,
-}
-
 class BurgerBuilder extends React.Component {
 	constructor() {
 		super()
 		this.state = {
-			purchasable: false,
 			purchasing: false,
 			loading: false,
 			error: false,
@@ -46,7 +38,7 @@ class BurgerBuilder extends React.Component {
 			.reduce((sum, el) => {
 				return sum + el
 			}, 0)
-		this.setState({ purchasable: sum > 0 })
+		return sum > 0
 	}
 
 	// addIngredientHandler = (type) => {
@@ -89,30 +81,18 @@ class BurgerBuilder extends React.Component {
 		this.setState({ purchasing: false })
 	}
 	purchaseContinueHandler = () => {
-		const queryParams = []
-		for (let i in this.state.ingredients) {
-			queryParams.push(
-				encodeURIComponent(i) +
-					'=' +
-					encodeURIComponent(this.state.ingredients[i])
-			)
-		}
-		queryParams.push('price=' + this.state.totalPrice)
-		const queryString = queryParams.join('&')
-
 		this.props.history.push({
 			pathname: '/checkout',
-			search: '?' + queryString,
-			// ingredients: this.state.ingredients
 		})
 	}
 	render() {
 		const disabledInfo = {
-			...this.props.ings
+			...this.props.ings,
 		}
 		//change quantity numbers to true or false:
 		for (let key in disabledInfo) {
 			disabledInfo[key] = disabledInfo[key] <= 0
+			console.log(`**** ${key}`, disabledInfo[key])
 		}
 		let orderSummary = null
 
@@ -130,7 +110,7 @@ class BurgerBuilder extends React.Component {
 						ingredientRemoved={this.props.onIngredientRemoved}
 						disabled={disabledInfo}
 						price={this.props.totPr}
-						purchasable={this.state.purchasable}
+						purchasable={this.updatePurchaseState(this.props.ings)}
 						ordered={this.purchaseHandler}
 					/>
 				</Aux>
@@ -165,15 +145,19 @@ class BurgerBuilder extends React.Component {
 const mapStateToProps = (state) => {
 	return {
 		ings: state.ingredients,
-		totPr: state.totalPrice
+		totPr: state.totalPrice,
 	}
 }
 const mapDispatchToprops = (dispatch) => {
 	return {
-		onIngredientAdded: (ingredientName) => dispatch({type: actionTypes.ADD_INGREDIENT, ingredientName}),
-		onIngredientRemoved: (ingredientName) => dispatch({type: actionTypes.REMOVE_INGREDIENT, ingredientName})
+		onIngredientAdded: (ingredientName) =>
+			dispatch({ type: actionTypes.ADD_INGREDIENT, ingredientName }),
+		onIngredientRemoved: (ingredientName) =>
+			dispatch({ type: actionTypes.REMOVE_INGREDIENT, ingredientName }),
 	}
 }
 
-export default connect(mapStateToProps, mapDispatchToprops)(withErrorHandler(BurgerBuilder, axiosIns))
-	
+export default connect(
+	mapStateToProps,
+	mapDispatchToprops
+)(withErrorHandler(BurgerBuilder, axiosIns))
