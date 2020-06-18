@@ -74,6 +74,7 @@ class ContactData extends React.Component {
 				value: '',
 				validation: {
 					required: true,
+					isEmail: true
 				},
 				valid: false,
 				touched: false,
@@ -123,9 +124,17 @@ class ContactData extends React.Component {
 		if (rules.minLength) {
 			isValid = value.length >= rules.minLength && isValid
 		}
-		if (rules.minLength) {
+		if (rules.maxLength) {
 			isValid = value.length <= rules.maxLength && isValid
 		}
+		if(rules.numeric){
+            const pattern = /^\d+$/;
+            isValid = pattern.test(value) && isValid
+        }
+        if(rules.isEmail){
+            const pattern = /^[a-zA-Z0-9][a-zA-Z0-9-_\.]+@([a-zA-Z]|[a-zA-Z0-9]?[a-zA-Z0-9-]+[a-zA-Z0-9])\.[a-zA-Z0-9]{2,10}(?:\.[a-zA-Z]{2,10})?$/
+            isValid = pattern.test(value) && isValid
+        }
 		return isValid
 	}
 
