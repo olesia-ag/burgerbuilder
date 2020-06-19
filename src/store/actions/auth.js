@@ -23,6 +23,9 @@ export const authFail = (error) => {
 }
 
 export const logout = () => {
+	localStorage.removeItem('token')
+	localStorage.removeItem('expirationTime')
+	localStorage.removeItem('userId')
 	return {
 		type: actionTypes.AUTH_LOGOUT,
 	}
@@ -32,7 +35,7 @@ export const checkAuthTimeout = (expirationTime) => {
 	return (dispatch) => {
 		setTimeout(() => {
 			dispatch(logout())
-		}, expirationTime*1000)
+		}, expirationTime * 1000)
 	}
 }
 
@@ -54,6 +57,15 @@ export const auth = (email, password, isSignup) => {
 			.post(url, authData)
 			.then((res) => {
 				console.log(res)
+				//from current time + time the token will be valid for
+				//gteTime return the number of milliseconds
+				//so it's today's date in milliseconds plus time it will epire in
+				const expDate = new Date(
+					new Date().getTime() + res.data.expiresIn * 1000
+				)
+				localStorage.setItem('token', res.data.idToken)
+				localStorage.setItem('expirationTime', expDate)
+				localStorage.setItem('userId', res.data.localId)
 				dispatch(authSuccess(res.data.idToken, res.data.localId))
 				dispatch(checkAuthTimeout(res.data.expiresIn))
 			})
@@ -64,10 +76,29 @@ export const auth = (email, password, isSignup) => {
 	}
 }
 
-
-export const setAuthRedirect = (path) =>{
+export const setAuthRedirect = (path) => {
 	return {
 		type: actionTypes.SET_AUTH_REDIRECT_PATH,
-		path: path
+		path: path,
+	}
+}
+
+export const authCheckState = () => {
+	console.log('got here')
+	return dispatch => {
+		const token = localStorage.getItem('token')
+		if (!token) {
+			dispatch(logout())
+		} else {
+			//exp time from local storage will be a string, so we need date constructor again to make it a date
+			const expirationTime = new Date(localStorage.getItem('expirationTime'))
+			if (expirationTime <= new Date()) {
+				dispatch(logout())
+			} else {
+				const userId = localStorage.getItem('userId')
+				dispatch(authSuccess(token, userId))
+				dispatch(checkAuthTimeout((expirationTime.getTime() - new Date().getTime()) / 1000))
+			}
+		}
 	}
 }

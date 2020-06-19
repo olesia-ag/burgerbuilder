@@ -4,4 +4,4 @@ export {
 	removeIngredient,
 	initIngredients,
 } from './burgerBuilder'
-export { auth, logout, setAuthRedirect } from './auth'
+export { auth, logout, setAuthRedirect, authCheckState } from './auth'
