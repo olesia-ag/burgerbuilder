@@ -110,7 +110,7 @@ class ContactData extends React.Component {
 			deliveryMethod: 'fastest',
 			orderData: formData,
 		}
-		this.props.onOrder(order)
+		this.props.onOrder(order, this.props.token)
 	}
 
 	checkValidity(value, rules) {
@@ -201,12 +201,13 @@ const mapStateToProps = (state) => {
 	return {
 		ings: state.burgerBuilder.ingredients,
 		totPr: state.burgerBuilder.totalPrice,
-		loading: state.order.loading
+		loading: state.order.loading,
+		token: state.auth.idToken
 	}
 }
 const mapDispatchToProps = dispatch => {
 	return {
-		onOrder: (orderData)=> dispatch(orderActions.purchaseBurger(orderData))
+		onOrder: (orderData, token)=> dispatch(orderActions.purchaseBurger(orderData, token))
 	}
 }
 
