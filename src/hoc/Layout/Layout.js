@@ -39,7 +39,7 @@ class Layout extends React.Component {
 
 const mapStateToProps = (state) => {
 	return {
-		isAuthenticated: state.auth.idToken !== null,
+		isAuthenticated: !!state.auth.idToken
 	}
 }
 export default connect(mapStateToProps)(Layout)

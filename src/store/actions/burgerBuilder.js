@@ -5,7 +5,8 @@ import axiosIns from '../../axios-orders'
 export const addIngredient = (name) => {
     return {
         type: actionTypes.ADD_INGREDIENT,
-        ingredientName: name
+        ingredientName: name,
+        
         
     }
 }
