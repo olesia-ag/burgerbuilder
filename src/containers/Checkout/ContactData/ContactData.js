@@ -109,6 +109,7 @@ class ContactData extends React.Component {
 			price: this.props.totPr,
 			deliveryMethod: 'fastest',
 			orderData: formData,
+			userId: this.props.userId
 		}
 		this.props.onOrder(order, this.props.token)
 	}
@@ -202,7 +203,8 @@ const mapStateToProps = (state) => {
 		ings: state.burgerBuilder.ingredients,
 		totPr: state.burgerBuilder.totalPrice,
 		loading: state.order.loading,
-		token: state.auth.idToken
+		token: state.auth.idToken,
+		userId: state.auth.userId
 	}
 }
 const mapDispatchToProps = dispatch => {
