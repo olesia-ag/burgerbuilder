@@ -3,7 +3,6 @@ import classes from './BuildControl.module.css'
 
 
 const buildControl = (props) => {
-    console.log('label:', props.label, 'disabled', props.disabled )
     return (
        <div className={classes.buildControl}>
         <div className={classes.label}>{props.label}</div>

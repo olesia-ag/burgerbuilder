@@ -18,7 +18,6 @@ class BurgerBuilder extends React.Component {
 		}
 	}
 	componentDidMount() {
-		console.log('burger builder props', this.props)
 		this.props.onInitIngredients()	
 	}
 

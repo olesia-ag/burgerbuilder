@@ -1,12 +1,10 @@
 import React from 'react'
 import Aux from '../../../hoc/Aux/Aux'
 import Button from '../../UI/Button/Button'
-import { NavLink } from 'react-router-dom'
+
 
 class OrderSummary extends React.Component {
-	// componentWillUpdate (){
-	// 	console.log('order summary will update')
-	// }
+
 
 	render() {
 		const ingredientSummary = Object.keys(this.props.ingredients).map(

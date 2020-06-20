@@ -7,6 +7,8 @@ import Input from '../../../components/UI/Input/Input'
 import { connect } from 'react-redux'
 import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler'
 import * as orderActions from '../../../store/actions/index'
+import { updateObject } from '../../../shared/utility'
+import {checkValidity} from '../../../shared/utility'
 
 class ContactData extends React.Component {
 	state = {
@@ -74,7 +76,7 @@ class ContactData extends React.Component {
 				value: '',
 				validation: {
 					required: true,
-					isEmail: true
+					isEmail: true,
 				},
 				valid: false,
 				touched: false,
@@ -92,7 +94,7 @@ class ContactData extends React.Component {
 				valid: true,
 			},
 		},
-		formIsValid: false
+		formIsValid: false,
 	}
 
 	orderHandler = (event) => {
@@ -109,48 +111,24 @@ class ContactData extends React.Component {
 			price: this.props.totPr,
 			deliveryMethod: 'fastest',
 			orderData: formData,
-			userId: this.props.userId
+			userId: this.props.userId,
 		}
 		this.props.onOrder(order, this.props.token)
 	}
 
-	checkValidity(value, rules) {
-		let isValid = true
-		if (!rules) {
-			return true
-		}
-		if (rules.required) {
-			isValid = value.trim() !== '' && isValid
-		}
-		if (rules.minLength) {
-			isValid = value.length >= rules.minLength && isValid
-		}
-		if (rules.maxLength) {
-			isValid = value.length <= rules.maxLength && isValid
-		}
-		if(rules.numeric){
-            const pattern = /^\d+$/;
-            isValid = pattern.test(value) && isValid
-        }
-        if(rules.isEmail){
-            const pattern = /^[a-zA-Z0-9][a-zA-Z0-9-_\.]+@([a-zA-Z]|[a-zA-Z0-9]?[a-zA-Z0-9-]+[a-zA-Z0-9])\.[a-zA-Z0-9]{2,10}(?:\.[a-zA-Z]{2,10})?$/
-            isValid = pattern.test(value) && isValid
-        }
-		return isValid
-	}
-
 	inputChangedHandler = (event, inputIdentifier) => {
-		const updatedOrderForm = {
-			...this.state.orderForm,
-		}
-		const updatedFormElement = { ...updatedOrderForm[inputIdentifier] }
-		updatedFormElement.value = event.target.value
-		updatedFormElement.valid = this.checkValidity(
-			updatedFormElement.value,
-			updatedFormElement.validation
+		const updatedFormElement = updateObject(
+			this.state.orderForm[inputIdentifier],
+			{
+				value: event.target.value,
+				valid: checkValidity(
+					event.target.value,
+					this.state.orderForm[inputIdentifier].validation
+				),
+				touched: true,
+			}
 		)
-		updatedFormElement.touched = true
-		updatedOrderForm[inputIdentifier] = updatedFormElement
+		const updatedOrderForm = updateObject(this.state.orderForm, {[inputIdentifier]: updatedFormElement})
 		let formIsValid = true
 		for (let inputIdentifier in updatedOrderForm) {
 			formIsValid = updatedOrderForm[inputIdentifier].valid && formIsValid
@@ -204,13 +182,17 @@ const mapStateToProps = (state) => {
 		totPr: state.burgerBuilder.totalPrice,
 		loading: state.order.loading,
 		token: state.auth.idToken,
-		userId: state.auth.userId
+		userId: state.auth.userId,
 	}
 }
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
 	return {
-		onOrder: (orderData, token)=> dispatch(orderActions.purchaseBurger(orderData, token))
+		onOrder: (orderData, token) =>
+			dispatch(orderActions.purchaseBurger(orderData, token)),
 	}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(ContactData, axiosIns))
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(withErrorHandler(ContactData, axiosIns))

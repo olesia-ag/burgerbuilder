@@ -84,7 +84,7 @@ export const setAuthRedirect = (path) => {
 }
 
 export const authCheckState = () => {
-	console.log('got here')
+
 	return dispatch => {
 		const token = localStorage.getItem('token')
 		if (!token) {

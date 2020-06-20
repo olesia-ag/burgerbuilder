@@ -6,6 +6,8 @@ import { connect } from 'react-redux'
 import * as actions from '../../store/actions'
 import Spinner from '../../components/UI/Spinner/Spinner'
 import { Redirect } from 'react-router-dom'
+import { updateObject } from '../../shared/utility'
+import {checkValidity} from '../../shared/utility'
 
 class Auth extends React.Component {
 	state = {
@@ -41,52 +43,27 @@ class Auth extends React.Component {
 		},
 		isSignup: true,
 	}
-//so that we don't go go to checkout if we're not building a burger: 
+	//so that we don't go go to checkout if we're not building a burger:
 	componentDidMount() {
-		if(!this.props.buildingBurger && this.props.authRedirectPath !== '/'){
+		if (!this.props.buildingBurger && this.props.authRedirectPath !== '/') {
 			this.props.onSetAuthRedirectPath()
 		}
 	}
 
-	checkValidity(value, rules) {
-		let isValid = true
-		if (!rules) {
-			return true
-		}
-		//should not be empty
-		if (rules.required) {
-			isValid = value.trim() !== '' && isValid
-		}
-		if (rules.minLength) {
-			isValid = value.length >= rules.minLength && isValid
-		}
-		if (rules.maxLength) {
-			isValid = value.length <= rules.maxLength && isValid
-		}
-		if (rules.numeric) {
-			const pattern = /^\d+$/
-			isValid = pattern.test(value) && isValid
-		}
-		if (rules.isEmail) {
-			const pattern = /^[a-zA-Z0-9][a-zA-Z0-9-_\.]+@([a-zA-Z]|[a-zA-Z0-9]?[a-zA-Z0-9-]+[a-zA-Z0-9])\.[a-zA-Z0-9]{2,10}(?:\.[a-zA-Z]{2,10})?$/
-			isValid = pattern.test(value) && isValid
-		}
-		return isValid
-	}
+
 
 	inputChangedHandler = (event, controlName) => {
-		const updateControls = {
-			...this.state.controls,
-			[controlName]: {
-				...this.state.controls[controlName],
+		const updateControls = updateObject(this.state.controls, {
+			[controlName]: updateObject(this.state.controls[controlName], {
 				value: event.target.value,
-				valid: this.checkValidity(
+				valid: checkValidity(
 					event.target.value,
 					this.state.controls[controlName].validation
 				),
 				touched: true,
-			},
-		}
+			}),
+		})
+
 		this.setState({ controls: updateControls })
 	}
 	submitHandler = (event) => {

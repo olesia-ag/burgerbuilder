@@ -20,7 +20,7 @@ export const removeIngredient = (name) => {
 }
 
 export const setIngredients = (ingredients) => {
-    console.log('git to thunk', ingredients)
+   
     return {
         type: actionTypes.SET_INGREDIENTS,
         ingredients: ingredients
@@ -38,7 +38,7 @@ export const initIngredients = () => {
         axiosIns
         .get('/ingredients.json')
         .then((response) => {
-            console.log("************* response", response)
+ 
             dispatch(setIngredients(response.data))
         })
         .catch((err) => {
