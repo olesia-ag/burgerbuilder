@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {Suspense} from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
 import App from './App'
@@ -26,7 +26,9 @@ const store = createStore(
 const app = (
 	<Provider store={store}>
 		<BrowserRouter>
-			<App />
+		<Suspense fallback={<div>Loading...</div>}>
+				<App />
+			</Suspense>	
 		</BrowserRouter>
 	</Provider>
 )
