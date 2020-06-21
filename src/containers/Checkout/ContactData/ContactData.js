@@ -109,7 +109,6 @@ class ContactData extends React.Component {
 			ingredients: this.props.ings,
 			//in production price shoulb be calculate on the server to make sure that user doesn't manipulate it
 			price: this.props.totPr,
-			deliveryMethod: 'fastest',
 			orderData: formData,
 			userId: this.props.userId,
 		}
@@ -133,7 +132,6 @@ class ContactData extends React.Component {
 		for (let inputIdentifier in updatedOrderForm) {
 			formIsValid = updatedOrderForm[inputIdentifier].valid && formIsValid
 		}
-		console.log('is it valid!', formIsValid)
 		this.setState({ orderForm: updatedOrderForm, formIsValid: formIsValid })
 	}
 	render() {

@@ -45,7 +45,7 @@ class Auth extends React.Component {
 	}
 	//so that we don't go go to checkout if we're not building a burger:
 	componentDidMount() {
-		if (!this.props.buildingBurger && this.props.authRedirectPath !== '/') {
+		if (!this.props.building && this.props.authRedirectPath !== '/') {
 			this.props.onSetAuthRedirectPath()
 		}
 	}
@@ -132,7 +132,7 @@ const mapStateToProps = (state) => {
 		loading: state.auth.loading,
 		error: state.auth.error,
 		isAuthenticated: !!state.auth.idToken,
-		builidinBurger: state.burgerBuilder.building,
+		building: state.burgerBuilder.building,
 		authRedirect: state.auth.authRedirectPath,
 	}
 }

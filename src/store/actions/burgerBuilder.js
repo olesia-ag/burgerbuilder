@@ -38,7 +38,6 @@ export const initIngredients = () => {
         axiosIns
         .get('/ingredients.json')
         .then((response) => {
- 
             dispatch(setIngredients(response.data))
         })
         .catch((err) => {
