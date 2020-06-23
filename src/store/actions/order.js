@@ -1,6 +1,7 @@
 import * as actionTypes from './actionTypes'
 import axiosIns from '../../axios-orders'
 
+
 export const purchaseBurgerSuccess = (id, orderData) => {
 	return {
 		type: actionTypes.PURCHASE_BURGER_SUCCESS,
@@ -77,5 +78,43 @@ export const fetchOrders = (token, userId) => {
 			.catch((error) => {
 				dispatch(fetchOrdersFail(error))
 			})
+	}
+}
+
+export const deleteOrderStart = () => {
+	return {
+		type: actionTypes.DELETE_ORDER_START,
+	}
+}
+
+export const deleteOrderSuccess = (orders) => {
+	return {
+		type: actionTypes.DELETE_ORDER_SUCCESS,
+		orders: orders,
+	}
+}
+
+export const deleteOrder = (orderId, token, orders) => {
+	return (dispatch) => {
+		dispatch(deleteOrderStart())
+		axiosIns
+			.delete('/orders/' + orderId + '.json?auth=' + token)
+			.then((res) => {
+				if(res.status === 200){
+					let newOrders = orders.filter(order=> order.id !== orderId)
+					dispatch(deleteOrderSuccess(newOrders))
+				}
+			})
+			.catch((error) => {
+				console.log(error)
+			})
+	}
+}
+
+
+export const deleteOrderFailed = (error) => {
+	return {
+		type: actionTypes.DELETE_ORDER_FAILED,
+		error: error
 	}
 }

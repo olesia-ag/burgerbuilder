@@ -26,3 +26,7 @@
     color: #944317;
 }
 
+.DeleteButton {
+    color: red;
+    transform: translateX(55vw)
+}

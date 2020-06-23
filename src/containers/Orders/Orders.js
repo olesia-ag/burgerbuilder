@@ -4,6 +4,7 @@ import axiosIns from '../../axios-orders'
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler'
 import Spinner from '../../components/UI/Spinner/Spinner'
 import * as actions from '../../store/actions/index'
+import Button from '../../components/UI/Button/Button'
 import { connect } from 'react-redux'
 
 class Orders extends React.Component {
@@ -19,15 +20,23 @@ class Orders extends React.Component {
 
 	render() {
 		let orders = <Spinner />
-		if(!this.props.loading){
+		if(!this.props.loading && this.props.orders.length!==0){
 			orders = this.props.orders.map((order) => (
+				<div>
 					<Order
 						key={order.id}
+						id={order.id}
 						ingredients={order.ingredients}
 						price={order.price}
+						delete={()=>this.props.onDeleteOrder(order.id, this.props.token, this.props.orders)}
 					/>
+				</div>
+				
 				))
 			
+		}
+		if(!this.props.loading && this.props.orders.length===0){
+			orders = <p>Seems like you don't have any orders here!</p>
 		}
 		return (
 			<div>
@@ -47,7 +56,8 @@ const mapStateToProps = state => {
 }
 const mapDispatchToProps = dispatch => {
 	return {
-		onFetchOrders: (token, userId) => dispatch(actions.fetchOrders(token, userId)) 
+		onFetchOrders: (token, userId) => dispatch(actions.fetchOrders(token, userId)),
+		onDeleteOrder: (orderId, token, orders) => dispatch(actions.deleteOrder(orderId, token, orders)) 
 	}
 }
 

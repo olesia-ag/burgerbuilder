@@ -1,5 +1,7 @@
 import React from 'react'
 import classes from './Order.module.css'
+import Button from '../UI/Button/Button'
+
 
 const order = (props) => {
 	// const ingredients = Object.keys(props.ingredients)
@@ -27,7 +29,7 @@ const order = (props) => {
 					display: 'inline-block',
 					margin: '0 8px',
 					border: '1px solid #ccc',
-					padding: '5px'
+					padding: '5px',
 				}}
 				key={ig.name}
 			>
@@ -38,7 +40,10 @@ const order = (props) => {
 
 	return (
 		<div className={classes.Order}>
-			<p>{ingredientOutput}</p>
+			<p>
+				{ingredientOutput}
+				<Button btnType='DeleteButton' clicked={props.delete}>DELETE</Button>{' '}
+			</p>
 			<p>
 				Price: <strong>{Number.parseFloat(props.price).toFixed(2)}</strong>
 			</p>
