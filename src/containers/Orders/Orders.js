@@ -4,7 +4,6 @@ import axiosIns from '../../axios-orders'
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler'
 import Spinner from '../../components/UI/Spinner/Spinner'
 import * as actions from '../../store/actions/index'
-import Button from '../../components/UI/Button/Button'
 import { connect } from 'react-redux'
 
 class Orders extends React.Component {
@@ -14,7 +13,6 @@ class Orders extends React.Component {
 	}
 
 	componentDidMount(){
-		console.log("*******, userId",  this.props.userId)
 		this.props.onFetchOrders(this.props.token, this.props.userId)
 	}
 

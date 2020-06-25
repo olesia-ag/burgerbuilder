@@ -77,8 +77,6 @@ const reducer = (state = initialState, action) => {
 
 		case actionTypes.DELETE_ORDER_FAILED: return deleteOrderFailed(state, action)
 
-
-		
  		default: return state
 	}
 }
