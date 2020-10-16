@@ -2,6 +2,8 @@ export { purchaseBurger, purchaseInit, fetchOrders, deleteOrder } from './order'
 export {
 	addIngredient,
 	removeIngredient,
-	initIngredients,
+	fetchIngredientsFailed,
+	setIngredients,
+	initIngredients
 } from './burgerBuilder'
-export { auth, logout, setAuthRedirect, authCheckState } from './auth'
+export { auth, logout, setAuthRedirect, authCheckState, logoutSucceed, authStart, checkAuthTimeout, authSuccess, authFail } from './auth'
