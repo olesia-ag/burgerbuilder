@@ -1,4 +1,4 @@
-export { purchaseBurger, purchaseInit, fetchOrders, deleteOrder } from './order'
+export { purchaseBurger, purchaseInit, fetchOrders, deleteOrder, purchaseBurgerSuccess, purchaseBurgerFail, purchaseBurgerStart, fetchOrdersStart, fetchOrdersFail, fetchOrdersSuccess } from './order'
 export {
 	addIngredient,
 	removeIngredient,
